@@ -11,7 +11,7 @@ fn main() {
 	App::new()
 		.add_plugins(DefaultPlugins)
 		.add_state::<GameState>()
-		.add_systems(Update(GameState::InGame), hello)
+		.add_systems(Update, hello.run_if(in_state(GameState::InGame)))
 		.run();
 }
 
