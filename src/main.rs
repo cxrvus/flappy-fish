@@ -1,9 +1,17 @@
 use bevy::prelude::*;
 
+#[derive(Clone, Debug, Default, Eq, Hash, PartialEq, States)]
+enum GameState {
+	Menu,
+	#[default]
+	InGame
+}
+
 fn main() {
 	App::new()
 		.add_plugins(DefaultPlugins)
-		.add_systems(Startup, hello)
+		.add_state::<GameState>()
+		.add_systems(Update(GameState::InGame), hello)
 		.run();
 }
 
