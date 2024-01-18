@@ -3,12 +3,12 @@ use bevy_rapier2d::prelude::*;
 use cfg::*;
 
 mod cfg {
-	pub const PLAYER_WIDTH: f32 = 512.;
+	pub const PLAYER_WIDTH: f32 = 256.;
 	pub const PLAYER_HEIGHT: f32 = 64.;
 	pub const PLAYER_SCALE: f32 = 0.5;
 	pub const PLAYER_WEIGHT: f32 = 10.;
 	pub const PLAYER_GRAVITY: f32 = 20.;
-	pub const JUMP_FORCE: f32 = 12000.;
+	pub const JUMP_FORCE: f32 = 10000.;
 	pub const GROUND_HEIGHT: f32 = 50.;
 }
 
