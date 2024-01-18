@@ -74,9 +74,8 @@ fn spawn_player
 	window: Query<&Window, With<PrimaryWindow>>,
 	asset_server: Res<AssetServer>,
 ) {
-	let window = window.get_single().unwrap();
-	let (_, w_width) = (window.height(), window.width());
-	let xpos = w_width / -2.0 + PLAYER_WIDTH / 2.0;
+	let window = window.single();
+	let xpos = window.width() / -2. + PLAYER_WIDTH / 2.;
 
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/fish.png"),
@@ -105,9 +104,8 @@ fn spawn_ground
 )
 {
 	let window = window.single();
-	let (winx, winy) = (window.width(), window.height());
-	let ground_size = Vec2::new(winx, cfg::GROUND_HEIGHT);
-	let ground_ypos = cfg::GROUND_HEIGHT / 2. + winy / -2.;
+	let ground_size = Vec2::new(window.width(), cfg::GROUND_HEIGHT);
+	let ground_ypos = window.height() / -2. + cfg::GROUND_HEIGHT / 2.;
 	commands.spawn(SpriteBundle {
 		sprite: Sprite { color: Color::MIDNIGHT_BLUE, custom_size: Some(ground_size), ..default() },
 		transform: Transform::from_translation(Vec3::new(0., ground_ypos, 0.1)),
