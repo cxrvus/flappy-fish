@@ -1,4 +1,4 @@
-use bevy::{prelude::*, window::{WindowResolution, PrimaryWindow, WindowMode}};
+use bevy::{prelude::*, window::PrimaryWindow};
 use bevy_rapier2d::prelude::*;
 use cfg::*;
 
@@ -14,14 +14,7 @@ fn main() {
 	App::new()
 		.add_plugins(DefaultPlugins
 			.set(WindowPlugin {
-				primary_window: Some(Window {
-					title: "FLAPPY FISH".into(),
-					resolution: WindowResolution::new(1280.0, 720.0),
-					resizable: false,
-					mode: WindowMode::Fullscreen,
-					..default()
-				}),
-				
+				primary_window: Some(Window { title: "FLAPPY FISH".into(), ..default() }),
 				..default()
 			})
 		)
