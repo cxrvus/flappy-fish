@@ -6,8 +6,10 @@ mod cfg {
 	pub const PLAYER_WIDTH: f32 = 512.;
 	pub const PLAYER_HEIGHT: f32 = 64.;
 	pub const PLAYER_SCALE: f32 = 0.5;
+	pub const PLAYER_WEIGHT: f32 = 10.;
+	pub const PLAYER_GRAVITY: f32 = 20.;
+	pub const JUMP_FORCE: f32 = 12000.;
 	pub const GROUND_HEIGHT: f32 = 50.;
-	pub const JUMP_FORCE: f32 = 5000.;
 }
 
 fn main() {
@@ -18,7 +20,7 @@ fn main() {
 				..default()
 			})
 		)
-		.add_plugins(RapierPhysicsPlugin::<NoUserData,>::pixels_per_meter(10.))
+		.add_plugins(RapierPhysicsPlugin::<NoUserData,>::pixels_per_meter(100.))
 		.add_state::<GameState>()
 		.insert_resource(RapierConfiguration::default())
 		.add_systems(Startup, (
@@ -88,11 +90,11 @@ fn spawn_player
 	.insert(Player)
 	.insert(RigidBody::Dynamic)
 	.insert(ExternalImpulse::default())
-	.insert(GravityScale(10.))
-	.insert(Collider::cuboid(cfg::PLAYER_WIDTH / 2., cfg::PLAYER_HEIGHT / 2.))
-	.insert(ColliderMassProperties::Mass(5.))
-	.insert(LockedAxes::ROTATION_LOCKED)
+	.insert(LockedAxes::ROTATION_LOCKED_Z)
 	.insert(LockedAxes::TRANSLATION_LOCKED_X)
+	.insert(GravityScale(cfg::PLAYER_GRAVITY))
+	.insert(Collider::cuboid(cfg::PLAYER_WIDTH / 2., cfg::PLAYER_HEIGHT / 2.))
+	.insert(ColliderMassProperties::Mass(cfg::PLAYER_WEIGHT))
 	;
 }
 
