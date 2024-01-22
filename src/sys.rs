@@ -23,22 +23,27 @@ mod env {
 }
 
 
-pub fn setup_camera
-(
-	mut commands: Commands
-) {
-	commands.spawn(Camera2dBundle::default());
-}
-
-pub fn setup_background
+pub fn setup
 (
 	mut commands: Commands,
 	asset_server: Res<AssetServer>
 ) {
+	commands.spawn(Camera2dBundle::default());
+
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/underwater.png"),
 		..default()
-	});
+	})
+	.insert(Background);
+}
+
+
+pub fn reset_background
+(
+	mut bg_transform: Query<&mut Transform, With<Background>>
+) {
+	let mut bg_transform = bg_transform.single_mut();
+	bg_transform.translation = Vec3::default();
 }
 
 
