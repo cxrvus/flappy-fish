@@ -29,7 +29,8 @@ fn main() {
 		))
 		.add_systems(Update, 
 			(
-				jump
+				jump,
+				collision_check
 			).run_if(in_state(GameState::InGame)))
 		.run();
 }

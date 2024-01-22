@@ -78,6 +78,7 @@ pub fn spawn_player
 	.insert(GravityScale(player::GRAVITY))
 	.insert(Collider::cuboid(player::WIDTH / 2., player::HEIGHT / 2.))
 	.insert(ColliderMassProperties::Mass(player::WEIGHT))
+	.insert(ActiveEvents::COLLISION_EVENTS)
 	;
 }
 
@@ -115,5 +116,16 @@ pub fn jump
 		if let Ok(mut impulse) = impulse.get_single_mut() {
 			impulse.impulse = Vec2::new(0., player::FORCE);
 		};
+	}
+}
+
+
+pub fn collision_check
+(
+	mut collision_events: EventReader<CollisionEvent>,
+	mut state: ResMut<NextState<GameState>>
+) {
+	if let Some(_) = collision_events.read().next() {
+		state.set(GameState::GameOver);
 	}
 }
