@@ -10,6 +10,7 @@ use sys::*;
 
 fn main() {
 	App::new()
+		.insert_resource(ClearColor(Color::rgb_u8(16, 28, 48)))
 		.add_plugins(DefaultPlugins
 			.set(WindowPlugin {
 				primary_window: Some(Window { title: "FLAPPY FISH".into(), resizable: false, ..default() }),
@@ -18,6 +19,7 @@ fn main() {
 		)
 		.add_plugins(RapierPhysicsPlugin::<NoUserData,>::pixels_per_meter(100.))
 		.add_state::<GameState>()
+		.init_resource::<Resoulution>()
 		.insert_resource(RapierConfiguration::default())
 		.add_systems(Startup, setup)
 		.add_systems(OnEnter(GameState::InGame), (

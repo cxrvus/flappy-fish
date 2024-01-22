@@ -26,12 +26,17 @@ mod env {
 pub fn setup
 (
 	mut commands: Commands,
-	asset_server: Res<AssetServer>
+	asset_server: Res<AssetServer>,
+	resolution: Res<Resoulution>
 ) {
 	commands.spawn(Camera2dBundle::default());
 
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/underwater.png"),
+		sprite: Sprite {
+			custom_size: Some(resolution.vec2),
+			..default()
+		},
 		..default()
 	})
 	.insert(Background);
