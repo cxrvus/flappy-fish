@@ -9,6 +9,8 @@ use super::structs::*;
 mod player {
 	pub const WIDTH: f32 = 512.; //PX
 	pub const HEIGHT: f32 = 256.; //PX
+	pub const COL_WIDTH: f32 = WIDTH / 2.; //PX
+	pub const COL_HEIGHT: f32 = HEIGHT / 6.; //PX
 	pub const SCALE: f32 = 0.5;
 	pub const ZPOS: f32 = 1.; //PX
 	pub const WEIGHT: f32 = 10.;
@@ -89,7 +91,7 @@ pub fn spawn_player
 	.insert(LockedAxes::ROTATION_LOCKED_Z)
 	.insert(LockedAxes::TRANSLATION_LOCKED_X)
 	.insert(GravityScale(player::GRAVITY))
-	.insert(Collider::cuboid(player::WIDTH / 2. * player::SCALE, player::HEIGHT / 2. * player::SCALE))
+	.insert(Collider::cuboid(player::COL_WIDTH, player::COL_HEIGHT))
 	.insert(ColliderMassProperties::Mass(player::WEIGHT))
 	.insert(ActiveEvents::COLLISION_EVENTS)
 	;
