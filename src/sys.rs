@@ -209,3 +209,14 @@ pub fn game_over
 	let mut player_sprite = player_sprite.single_mut();
 	player_sprite.flip_y = true;
 }
+
+
+pub fn play_again
+(
+	kb: Res<Input<KeyCode>>,
+	mut next_state: ResMut<NextState<GameState>>
+) {
+	if kb.pressed(KeyCode::Escape) {
+		next_state.set(GameState::InGame);
+	}
+}

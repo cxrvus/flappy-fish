@@ -37,5 +37,6 @@ fn main() {
 				despawn_pipes
 			).run_if(in_state(GameState::InGame)))
 		.add_systems(OnEnter(GameState::GameOver), game_over)
+		.add_systems(Update, play_again.run_if(in_state(GameState::GameOver)))
 		.run();
 }
