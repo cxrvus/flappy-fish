@@ -33,7 +33,8 @@ fn main() {
 				jump,
 				collision_check,
 				spawn_pipes,
-				move_pipes
+				move_pipes,
+				despawn_pipes
 			).run_if(in_state(GameState::InGame)))
 		.add_systems(OnEnter(GameState::GameOver), game_over)
 		.run();

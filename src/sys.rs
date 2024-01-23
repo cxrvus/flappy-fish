@@ -189,7 +189,17 @@ pub fn move_pipes
 }
 
 
-// todo: despawn pipes
+pub fn despawn_pipes
+(
+	mut commands: Commands,
+	pipes: Query<(&Transform, Entity), With<Pipe>>
+) {
+	for (transform, entity) in &pipes {
+		if transform.translation.x < - (env::W_WIDTH / 2. + pipes::WIDTH) {
+			commands.entity(entity).despawn();
+		}
+	}
+}
 
 
 pub fn game_over
