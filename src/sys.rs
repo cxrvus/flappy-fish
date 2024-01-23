@@ -12,7 +12,7 @@ mod player {
 	pub const COL_WIDTH: f32 = WIDTH / 3.; //PX
 	pub const COL_HEIGHT: f32 = HEIGHT / 6.; //PX
 	pub const SCALE: f32 = 0.5;
-	pub const ZPOS: f32 = 1.; //PX
+	pub const ZPOS: f32 = 2.; //PX
 	pub const WEIGHT: f32 = 10.;
 	pub const GRAVITY: f32 = 20.;
 	pub const FORCE: f32 = 8000.;
@@ -25,7 +25,7 @@ pub mod pipes {
 	pub const INTERVAL: f32 = 1.7; //SECONDS between spawns
 	pub const SPEED: f32 = 5.; //PX per frame
 	pub const MAX_Y_OFFSET: f32 = 150.; //PX - max above/below screen center
-	pub const ZPOS: f32 = 2.; //PX
+	pub const ZPOS: f32 = 1.; //PX
 }
 
 mod env {
