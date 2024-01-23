@@ -19,7 +19,6 @@ fn main() {
 		)
 		.add_plugins(RapierPhysicsPlugin::<NoUserData,>::pixels_per_meter(100.))
 		.add_state::<GameState>()
-		.init_resource::<Resoulution>()
 		.insert_resource(RapierConfiguration::default())
 		.add_systems(Startup, setup)
 		.add_systems(OnEnter(GameState::InGame), (

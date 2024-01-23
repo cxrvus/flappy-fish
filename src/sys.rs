@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
+
 use super::structs::*;
 
 
@@ -19,6 +20,8 @@ mod pipes {
 }
 
 mod env {
+	pub const W_HEIGHT: f32 = 720.; //PX
+	pub const W_WIDTH: f32 = 1280.; //PX
 	pub const GROUND_HEIGHT: f32 = 50.; //PX
 }
 
@@ -27,14 +30,13 @@ pub fn setup
 (
 	mut commands: Commands,
 	asset_server: Res<AssetServer>,
-	resolution: Res<Resoulution>
 ) {
 	commands.spawn(Camera2dBundle::default());
 
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/underwater.png"),
 		sprite: Sprite {
-			custom_size: Some(resolution.vec2),
+			custom_size: Some(Vec2::new(env::W_WIDTH, env::W_HEIGHT)),
 			..default()
 		},
 		..default()
