@@ -31,8 +31,6 @@ pub mod pipes {
 mod env {
 	pub const W_HEIGHT: f32 = 720.; //PX
 	pub const W_WIDTH: f32 = 1280.; //PX
-	pub const GROUND_HEIGHT: f32 = 50.; //PX
-	pub const GROUND_ZPOS: f32 = 0.5; //PX
 }
 
 
@@ -125,14 +123,9 @@ pub fn spawn_ground
 	mut commands: Commands,
 )
 {
-	let ground_size = Vec2::new(env::W_WIDTH, env::GROUND_HEIGHT);
-	let ground_ypos = env::W_HEIGHT / -2. + env::GROUND_HEIGHT / 2.;
-	commands.spawn(SpriteBundle {
-		sprite: Sprite { color: Color::rgb(0., 0., 0.1), custom_size: Some(ground_size), ..default() },
-		transform: Transform::from_translation(Vec3::new(0., ground_ypos, env::GROUND_ZPOS)),
-		..default()
-	})
-	.insert(Collider::cuboid(ground_size.x / 2., ground_size.y / 4.))
+	commands
+		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
+		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
 	;
 }
 
