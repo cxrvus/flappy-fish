@@ -20,7 +20,9 @@ fn main() {
 		.add_plugins(RapierPhysicsPlugin::<NoUserData,>::pixels_per_meter(100.))
 		.add_state::<GameState>()
 		.insert_resource(RapierConfiguration::default())
+		.init_resource::<PipeTimer>()
 		.add_systems(Startup, setup)
+		.add_systems(Startup, spawn_pipes)
 		.add_systems(OnEnter(GameState::InGame), (
 			reset_background,
 			spawn_player,
