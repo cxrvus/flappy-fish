@@ -18,12 +18,11 @@ fn main() {
 			})
 		)
 		.add_plugins(RapierPhysicsPlugin::<NoUserData,>::pixels_per_meter(100.))
-		.add_plugins(RapierDebugRenderPlugin::default())
+		// .add_plugins(RapierDebugRenderPlugin::default())
 		.add_state::<GameState>()
 		.insert_resource(RapierConfiguration::default())
 		.init_resource::<PipeTimer>()
 		.add_systems(Startup, setup)
-		.add_systems(Startup, spawn_pipes)
 		.add_systems(OnEnter(GameState::InGame), (
 			reset_background,
 			spawn_player,
@@ -33,6 +32,7 @@ fn main() {
 			(
 				jump,
 				collision_check,
+				spawn_pipes,
 				move_pipes
 			).run_if(in_state(GameState::InGame)))
 		.add_systems(OnEnter(GameState::GameOver), game_over)

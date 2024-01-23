@@ -22,7 +22,7 @@ pub mod pipes {
 	pub const HEIGHT: f32 = 600.; //PX
 	pub const WIDTH: f32 = 196.; //PX
 	pub const GAP: f32 = 250.; //PX between upper & lower
-	pub const INTERVAL: f32 = 2.; //SECONDS between spawns
+	pub const INTERVAL: f32 = 1.7; //SECONDS between spawns
 	pub const SPEED: f32 = 5.; //PX per frame
 	pub const MAX_Y_OFFSET: f32 = 150.; //PX - max above/below screen center
 	pub const ZPOS: f32 = 2.; //PX
@@ -148,10 +148,13 @@ pub fn spawn_pipes
 	time: Res<Time>,
 	mut timer: ResMut<PipeTimer>
 ) {
-	// if !timer.0.just_finished() {
-	// 	timer.0.tick(time.delta());
-	// 	return;
-	// }
+	if !timer.0.just_finished() {
+		timer.0.tick(time.delta());
+		return;
+	}
+	else {
+		timer.0.reset();
+	}
 
 	let texture = asset_server.load("sprites/pipe.png");
 	let mut rng = thread_rng();
@@ -159,7 +162,7 @@ pub fn spawn_pipes
 	let gap = (pipes::GAP + pipes::HEIGHT) / 2.;
 	let ypos_lower = offset - gap;
 	let ypos_upper = offset + gap;
-	let xpos = env::W_WIDTH / 2.;
+	let xpos = env::W_WIDTH / 2. + pipes::WIDTH;
 
 	commands.spawn(PipeBundle::with_sprite_bundle(SpriteBundle {
 		texture: texture.clone(),
