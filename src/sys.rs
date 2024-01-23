@@ -1,5 +1,5 @@
 use std::time::Duration;
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use rand::{thread_rng, Rng};
 
@@ -16,7 +16,7 @@ mod player {
 	pub const FORCE: f32 = 10000.;
 }
 
-mod pipes {
+pub mod pipes {
 	pub const HEIGHT: f32 = 600.; //PX
 	pub const WIDTH: f32 = 196.; //PX
 	pub const GAP: f32 = 200.; //PX between upper & lower
@@ -146,34 +146,27 @@ pub fn spawn_pipes
 	mut timer: ResMut<PipeTimer>
 ) {
 	let texture = asset_server.load("sprites/pipe.png");
-	let collider = Collider::cuboid(pipes::WIDTH / 2., pipes::HEIGHT / 2.);
 
 	// let offset = -pipes::MAX_Y_OFFSET;
 	let mut rng = thread_rng();
 	let offset = rng.gen_range(-pipes::MAX_Y_OFFSET..=pipes::MAX_Y_OFFSET);
+	let gap = (pipes::GAP + pipes::HEIGHT) / 2.;
 	let xpos = env::W_WIDTH / 2.;
-	let ypos_lower = offset - (pipes::GAP / 2.);
-	let ypos_upper = offset + (pipes::GAP / 2.);
+	let ypos_lower = offset - gap;
+	let ypos_upper = offset + gap;
 
-	commands.spawn(SpriteBundle {
+	commands.spawn(PipeBundle::with_sprite_bundle(SpriteBundle {
 		texture: texture.clone(),
 		transform: Transform::from_translation(Vec3::new(xpos, ypos_lower, pipes::ZPOS)),
-		sprite: Sprite { anchor: Anchor::TopCenter, ..default() },
 		..default()
-	})
-	.insert(Pipe)
-	.insert(collider.clone())
-	;
+	}));
 
-	commands.spawn(SpriteBundle {
-		texture: texture.clone(),
+	commands.spawn(PipeBundle::with_sprite_bundle(SpriteBundle {
+		texture,
 		transform: Transform::from_translation(Vec3::new(xpos, ypos_upper, pipes::ZPOS)),
-		sprite: Sprite { anchor: Anchor::BottomCenter, flip_y: true, ..default() },
+		sprite: Sprite { flip_y: true, ..default() },
 		..default()
-	})
-	.insert(Pipe)
-	.insert(collider.clone())
-	;
+	}));
 }
 
 
