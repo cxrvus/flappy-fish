@@ -9,19 +9,19 @@ use super::structs::*;
 mod player {
 	pub const WIDTH: f32 = 512.; //PX
 	pub const HEIGHT: f32 = 256.; //PX
-	pub const COL_WIDTH: f32 = WIDTH / 2.; //PX
+	pub const COL_WIDTH: f32 = WIDTH / 3.; //PX
 	pub const COL_HEIGHT: f32 = HEIGHT / 6.; //PX
 	pub const SCALE: f32 = 0.5;
 	pub const ZPOS: f32 = 1.; //PX
 	pub const WEIGHT: f32 = 10.;
 	pub const GRAVITY: f32 = 20.;
-	pub const FORCE: f32 = 10000.;
+	pub const FORCE: f32 = 8000.;
 }
 
 pub mod pipes {
 	pub const HEIGHT: f32 = 600.; //PX
 	pub const WIDTH: f32 = 196.; //PX
-	pub const GAP: f32 = 200.; //PX between upper & lower
+	pub const GAP: f32 = 250.; //PX between upper & lower
 	pub const INTERVAL: f32 = 2.; //SECONDS between spawns
 	pub const SPEED: f32 = 5.; //PX per frame
 	pub const MAX_Y_OFFSET: f32 = 150.; //PX - max above/below screen center
