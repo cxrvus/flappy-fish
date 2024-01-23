@@ -187,3 +187,12 @@ pub fn move_pipes
 
 
 // todo: despawn pipes
+
+
+pub fn game_over
+(
+	mut player_sprite: Query<&mut Sprite, With<Player>>
+) {
+	let mut player_sprite = player_sprite.single_mut();
+	player_sprite.flip_y = true;
+}

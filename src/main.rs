@@ -35,5 +35,6 @@ fn main() {
 				collision_check,
 				move_pipes
 			).run_if(in_state(GameState::InGame)))
+		.add_systems(OnEnter(GameState::GameOver), game_over)
 		.run();
 }
