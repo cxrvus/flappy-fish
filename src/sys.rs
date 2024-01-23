@@ -145,17 +145,21 @@ pub fn spawn_pipes
 (
 	mut commands: Commands,
 	asset_server: Res<AssetServer>,
+	time: Res<Time>,
 	mut timer: ResMut<PipeTimer>
 ) {
-	let texture = asset_server.load("sprites/pipe.png");
+	// if !timer.0.just_finished() {
+	// 	timer.0.tick(time.delta());
+	// 	return;
+	// }
 
-	// let offset = -pipes::MAX_Y_OFFSET;
+	let texture = asset_server.load("sprites/pipe.png");
 	let mut rng = thread_rng();
 	let offset = rng.gen_range(-pipes::MAX_Y_OFFSET..=pipes::MAX_Y_OFFSET);
 	let gap = (pipes::GAP + pipes::HEIGHT) / 2.;
-	let xpos = env::W_WIDTH / 2.;
 	let ypos_lower = offset - gap;
 	let ypos_upper = offset + gap;
+	let xpos = env::W_WIDTH / 2.;
 
 	commands.spawn(PipeBundle::with_sprite_bundle(SpriteBundle {
 		texture: texture.clone(),
@@ -172,6 +176,14 @@ pub fn spawn_pipes
 }
 
 
-// todo: move pipes
-// todo: despawn pipes
+pub fn move_pipes
+(
+	mut pipe_transforms: Query<&mut Transform, With<Pipe>>
+) {
+	for mut transform in &mut pipe_transforms {
+		transform.translation.x -= pipes::SPEED;
+	}
+}
 
+
+// todo: despawn pipes
