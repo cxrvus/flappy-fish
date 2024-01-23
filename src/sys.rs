@@ -70,11 +70,9 @@ pub fn reset_background
 pub fn spawn_player
 (
 	mut commands: Commands,
-	window: Query<&Window, With<bevy::window::PrimaryWindow>>,
 	asset_server: Res<AssetServer>,
 ) {
-	let window = window.single();
-	let xpos = window.width() / -2. + player::WIDTH / 2.;
+	let xpos = (-env::W_WIDTH + player::WIDTH) / 2. ;
 
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/fish.png"),
@@ -125,12 +123,10 @@ pub fn collision_check
 pub fn spawn_ground
 (
 	mut commands: Commands,
-	window: Query<&Window, With<bevy::window::PrimaryWindow>>,
 )
 {
-	let window = window.single();
-	let ground_size = Vec2::new(window.width(), env::GROUND_HEIGHT);
-	let ground_ypos = window.height() / -2. + env::GROUND_HEIGHT / 2.;
+	let ground_size = Vec2::new(env::W_WIDTH, env::GROUND_HEIGHT);
+	let ground_ypos = env::W_HEIGHT / -2. + env::GROUND_HEIGHT / 2.;
 	commands.spawn(SpriteBundle {
 		sprite: Sprite { color: Color::rgb(0., 0., 0.1), custom_size: Some(ground_size), ..default() },
 		transform: Transform::from_translation(Vec3::new(0., ground_ypos, env::GROUND_ZPOS)),
