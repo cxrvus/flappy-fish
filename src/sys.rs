@@ -56,20 +56,40 @@ pub fn setup
 }
 
 
-pub fn reset_background
+pub fn new_game
 (
-	mut bg_transform: Query<&mut Transform, With<Background>>
+	mut commands: Commands,
+	mut bg_transform: Query<&mut Transform, With<Background>>,
+	pipes: Query<Entity, With<Pipe>>,
+	mut timer: ResMut<PipeTimer>
 ) {
+	// unpause pipe timer
+	timer.0.unpause();
+
+	// despawn pipes
+	pipes.for_each(|pipe| commands.entity(pipe).despawn());
+
+	// reset background
 	let mut bg_transform = bg_transform.single_mut();
 	bg_transform.translation = Vec3::default();
+
+	// spawn lower bound
+	// todo: spawn upper bound
+	commands
+		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
+		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
+	;
 }
 
 
 pub fn spawn_player
 (
 	mut commands: Commands,
+	player: Query<Entity, With<Player>>,
 	asset_server: Res<AssetServer>,
 ) {
+	if let Ok(player) = player.get_single() { commands.entity(player).despawn() }
+
 	let xpos = (-env::W_WIDTH + player::WIDTH) / 2. ;
 
 	commands.spawn(SpriteBundle {
@@ -118,16 +138,6 @@ pub fn collision_check
 }
 
 
-pub fn spawn_ground
-(
-	mut commands: Commands,
-)
-{
-	commands
-		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
-		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
-	;
-}
 
 
 pub fn spawn_pipes
@@ -193,10 +203,13 @@ pub fn despawn_pipes
 
 pub fn game_over
 (
-	mut player_sprite: Query<&mut Sprite, With<Player>>
+	mut player_sprite: Query<&mut Sprite, With<Player>>,
+	mut timer: ResMut<PipeTimer>
 ) {
 	let mut player_sprite = player_sprite.single_mut();
 	player_sprite.flip_y = true;
+	timer.0.pause();
+	timer.0.reset();
 }
 
 

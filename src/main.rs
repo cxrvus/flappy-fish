@@ -24,9 +24,8 @@ fn main() {
 		.init_resource::<PipeTimer>()
 		.add_systems(Startup, setup)
 		.add_systems(OnEnter(GameState::InGame), (
-			reset_background,
+			new_game,
 			spawn_player,
-			spawn_ground,
 		))
 		.add_systems(Update, 
 			(
@@ -34,7 +33,7 @@ fn main() {
 				collision_check,
 				spawn_pipes,
 				move_pipes,
-				despawn_pipes
+				despawn_pipes,
 			).run_if(in_state(GameState::InGame)))
 		.add_systems(OnEnter(GameState::GameOver), game_over)
 		.add_systems(Update, play_again.run_if(in_state(GameState::GameOver)))
