@@ -19,7 +19,7 @@ fn main() {
 			})
 		)
 		.add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.))
-		.add_plugins(RapierDebugRenderPlugin::default())
+		// .add_plugins(RapierDebugRenderPlugin::default())
 		.init_resource::<RapierConfiguration>()
 		.init_resource::<PipeTimer>()
 		.init_resource::<Score>()
