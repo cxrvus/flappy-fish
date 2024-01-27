@@ -21,6 +21,7 @@ fn main() {
 		.add_plugins(RapierDebugRenderPlugin::default())
 		.init_resource::<RapierConfiguration>()
 		.init_resource::<PipeTimer>()
+		.init_resource::<Score>()
 		.add_state::<GameState>()
 		.add_systems(Startup, setup)
 		.add_systems(OnEnter(GameState::InGame), (
@@ -34,6 +35,7 @@ fn main() {
 				spawn_pipes,
 				move_pipes,
 				despawn_pipes,
+				update_score_display
 			).run_if(in_state(GameState::InGame)))
 		.add_systems(OnEnter(GameState::GameOver), game_over)
 		.add_systems(Update, play_again.run_if(in_state(GameState::GameOver)))

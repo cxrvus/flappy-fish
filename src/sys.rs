@@ -7,15 +7,18 @@ use super::structs::*;
 
 
 mod player {
+	use super::win;
 	pub const WIDTH: f32 = 512.; //PX
 	pub const HEIGHT: f32 = 256.; //PX
 	pub const COL_WIDTH: f32 = WIDTH / 3.; //PX
 	pub const COL_HEIGHT: f32 = HEIGHT / 6.; //PX
 	pub const SCALE: f32 = 0.5;
-	pub const ZPOS: f32 = 2.; //PX
 	pub const WEIGHT: f32 = 10.;
 	pub const GRAVITY: f32 = 20.;
 	pub const FORCE: f32 = 8000.;
+	pub const SCORE_ZPOS: f32 = 3.; //PX
+	pub const ZPOS: f32 = 2.; //PX
+	pub const XPOS: f32 = (-win::WIDTH + WIDTH) / 2.; //PX
 }
 
 pub mod pipes {
@@ -28,9 +31,9 @@ pub mod pipes {
 	pub const ZPOS: f32 = 1.; //PX
 }
 
-mod env {
-	pub const W_HEIGHT: f32 = 720.; //PX
-	pub const W_WIDTH: f32 = 1280.; //PX
+mod win {
+	pub const HEIGHT: f32 = 720.; //PX
+	pub const WIDTH: f32 = 1280.; //PX
 }
 
 
@@ -38,6 +41,7 @@ pub fn setup
 (
 	mut commands: Commands,
 	asset_server: Res<AssetServer>,
+	score: Res<Score>,
 	mut timer: ResMut<PipeTimer>
 ) {
 	// create timer
@@ -50,7 +54,7 @@ pub fn setup
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/underwater.png"),
 		sprite: Sprite {
-			custom_size: Some(Vec2::new(env::W_WIDTH, env::W_HEIGHT)),
+			custom_size: Some(Vec2::new(win::WIDTH, win::HEIGHT)),
 			..default()
 		},
 		..default()
@@ -60,9 +64,21 @@ pub fn setup
 	// spawn lower bound
 	// todo: spawn upper bound
 	commands
-		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
-		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
+		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -win::HEIGHT / 2., 0.))))
+		.insert(Collider::cuboid(win::WIDTH / 2., 1.))
 		.insert(ObstacleBundle::default())
+	;
+
+	// create score display
+	let score_ypos = win::HEIGHT / 2. - 200.;
+	commands
+		.spawn(Text2dBundle {
+			text: Text::from_section(score.0.to_string(), TextStyle { font_size: 50., ..default() }),
+			transform: Transform::from_translation(
+				Vec3::new(player::XPOS, score_ypos, player::SCORE_ZPOS)),
+			..default()
+		})
+		.insert(ScoreDisplay)
 	;
 }
 
@@ -94,12 +110,10 @@ pub fn spawn_player
 ) {
 	if let Ok(player) = player.get_single() { commands.entity(player).despawn() }
 
-	let xpos = (-env::W_WIDTH + player::WIDTH) / 2. ;
-
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/fish.png"),
 		transform: Transform {
-			translation: Vec3::new(xpos, 0.0, player::ZPOS),
+			translation: Vec3::new(player::XPOS, 0.0, player::ZPOS),
 			scale: Vec3::new(player::SCALE, player::SCALE, 1.0),
 			..default()
 		},
@@ -167,7 +181,7 @@ pub fn spawn_pipes
 	let gap = (pipes::GAP + pipes::HEIGHT) / 2.;
 	let ypos_lower = offset - gap;
 	let ypos_upper = offset + gap;
-	let xpos = env::W_WIDTH / 2. + pipes::WIDTH;
+	let xpos = win::WIDTH / 2. + pipes::WIDTH;
 
 	commands.spawn(PipeBundle::with_sprite_bundle(SpriteBundle {
 		texture: texture.clone(),
@@ -200,10 +214,20 @@ pub fn despawn_pipes
 	pipes: Query<(&Transform, Entity), With<Pipe>>
 ) {
 	for (transform, entity) in &pipes {
-		if transform.translation.x < - (env::W_WIDTH / 2. + pipes::WIDTH) {
+		if transform.translation.x < - (win::WIDTH / 2. + pipes::WIDTH) {
 			commands.entity(entity).despawn();
 		}
 	}
+}
+
+
+pub fn update_score_display
+(
+	mut score_display: Query<&mut Text, With<ScoreDisplay>>,
+	score: Res<Score>
+) {
+	let mut score_display = score_display.single_mut();
+	score_display.sections.get_mut(0).unwrap().value = score.0.to_string();
 }
 
 
@@ -214,6 +238,7 @@ pub fn game_over
 ) {
 	let mut player_sprite = player_sprite.single_mut();
 	player_sprite.flip_y = true;
+
 	timer.0.pause();
 	timer.0.reset();
 }

@@ -59,9 +59,15 @@ pub struct Obstacle;
 #[derive(Component)]
 pub struct Player;
 
+#[derive(Component)]
+pub struct ScoreDisplay;
+
 
 #[derive(Resource, Default)]
 pub struct PipeTimer(pub Timer);
+
+#[derive(Resource, Default)]
+pub struct Score(pub u32);
 
 
 #[derive(States, Debug, Clone, Copy, Default, Eq, PartialEq, Hash)]
