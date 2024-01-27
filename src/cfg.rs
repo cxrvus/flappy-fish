@@ -16,7 +16,7 @@ pub mod player {
 pub mod pipes {
 	pub const HEIGHT: f32 = 600.; //PX
 	pub const WIDTH: f32 = 196.; //PX
-	pub const GAP: f32 = 250.; //PX between upper & lower
+	pub const GAP: f32 = 220.; //PX between upper & lower
 	pub const INTERVAL: f32 = 1.7; //SECONDS between spawns
 	pub const SPEED: f32 = 5.; //PX per frame
 	pub const MAX_Y_OFFSET: f32 = 150.; //PX - max above/below screen center
