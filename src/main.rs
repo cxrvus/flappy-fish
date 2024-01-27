@@ -32,9 +32,9 @@ fn main() {
 		.add_systems(Update, 
 			(
 				jump,
-				collision_check,
+				handle_collisions,
 				spawn_pipes,
-				move_pipes,
+				scroll_objects,
 				despawn_pipes,
 				update_score_display
 			).run_if(in_state(GameState::InGame)))

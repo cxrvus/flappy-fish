@@ -31,8 +31,8 @@ pub fn setup
 	})
 	.insert(Background);
 
-	// spawn lower bound
 	// todo: spawn upper bound
+	// spawn lower bound
 	commands
 		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -win::HEIGHT / 2., 0.))))
 		.insert(Collider::cuboid(win::WIDTH / 2., 1.))
@@ -58,17 +58,23 @@ pub fn new_game
 	mut commands: Commands,
 	mut bg_transform: Query<&mut Transform, With<Background>>,
 	pipes: Query<Entity, With<Pipe>>,
+	score_triggers: Query<Entity, With<ScoreTrigger>>,
+	mut score: ResMut<Score>,
 	mut timer: ResMut<PipeTimer>
 ) {
 	// unpause pipe timer
 	timer.0.unpause();
 
-	// despawn pipes
-	pipes.for_each(|pipe| commands.entity(pipe).despawn());
+	// despawn pipes & score triggers
+	pipes.for_each(|entity| commands.entity(entity).despawn());
+	score_triggers.for_each(|entity| commands.entity(entity).despawn());
 
 	// reset background
 	let mut bg_transform = bg_transform.single_mut();
 	bg_transform.translation = Vec3::default();
+
+	// reset score
+	score.0 = 0;
 }
 
 
@@ -115,17 +121,20 @@ pub fn jump
 }
 
 
-pub fn collision_check
+pub fn handle_collisions
 (
 	mut collision_events: EventReader<CollisionEvent>,
-	mut state: ResMut<NextState<GameState>>,
 	obstacles: Query<Entity, With<Obstacle>>,
+	score_triggers: Query<Entity, With<ScoreTrigger>>,
 	player: Query<Entity, With<Player>>,
+	mut state: ResMut<NextState<GameState>>,
+	mut score: ResMut<Score>,
 ) {
 	let player = player.single();
 	while let Some(CollisionEvent::Started(a, b, _)) = collision_events.read().next() {
 		let other = if *a != player { *a } else { *b };
 		if obstacles.contains(other) { state.set(GameState::GameOver); }
+		else if score_triggers.contains(other) { score.0 += 1; }
 	}
 }
 
@@ -165,15 +174,26 @@ pub fn spawn_pipes
 		sprite: Sprite { flip_y: true, ..default() },
 		..default()
 	}));
+
+	let ypos_trigger = ypos_lower + (pipes::HEIGHT + pipes::GAP) / 2. ;
+
+	commands
+		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(xpos, ypos_trigger, 0.))))
+		.insert(Collider::cuboid(0.1, pipes::GAP / 2.))
+		.insert(Sensor)
+		.insert(OBSTACLE_GROUPS)
+		.insert(Scroll(pipes::SPEED))
+		.insert(ScoreTrigger)
+	;
 }
 
 
-pub fn move_pipes
+pub fn scroll_objects
 (
-	mut pipe_transforms: Query<&mut Transform, With<Pipe>>
+	mut transforms: Query<(&mut Transform, &Scroll)>
 ) {
-	for mut transform in &mut pipe_transforms {
-		transform.translation.x -= pipes::SPEED;
+	for (mut transform, scroll) in &mut transforms {
+		transform.translation.x -= scroll.0;
 	}
 }
 
@@ -181,9 +201,11 @@ pub fn move_pipes
 pub fn despawn_pipes
 (
 	mut commands: Commands,
-	pipes: Query<(&Transform, Entity), With<Pipe>>
+	pipes: Query<(&Transform, Entity), With<Pipe>>,
+	score_triggers: Query<(&Transform, Entity), With<ScoreTrigger>>
 ) {
-	for (transform, entity) in &pipes {
+	let query = pipes.iter().chain(score_triggers.iter());
+	for (transform, entity) in query {
 		if transform.translation.x < - (win::WIDTH / 2. + pipes::WIDTH) {
 			commands.entity(entity).despawn();
 		}
