@@ -78,6 +78,7 @@ pub fn new_game
 	commands
 		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
 		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
+		.insert(OBSTACLE_GROUPS)
 	;
 }
 
@@ -108,6 +109,7 @@ pub fn spawn_player
 	.insert(GravityScale(player::GRAVITY))
 	.insert(Collider::capsule_x(player::COL_WIDTH, player::COL_HEIGHT))
 	.insert(ColliderMassProperties::Mass(player::WEIGHT))
+	.insert(CollisionGroups::new(Group::GROUP_1, Group::GROUP_2))
 	.insert(ActiveEvents::COLLISION_EVENTS)
 	;
 }
@@ -135,8 +137,6 @@ pub fn collision_check
 		state.set(GameState::GameOver);
 	}
 }
-
-
 
 
 pub fn spawn_pipes

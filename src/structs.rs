@@ -1,12 +1,16 @@
 use bevy::prelude::*;
-use bevy_rapier2d::geometry::Collider;
+use bevy_rapier2d::prelude::*;
 use super::pipes;
+
+
+pub const OBSTACLE_GROUPS: CollisionGroups = CollisionGroups::new(Group::GROUP_2, Group::GROUP_1);
 
 
 #[derive(Bundle)]
 pub struct PipeBundle{
 	sprite_bundle: SpriteBundle,
 	collider: Collider,
+	groups: CollisionGroups,
 	pipe: Pipe
 }
 
@@ -15,6 +19,7 @@ impl Default for PipeBundle {
         Self {
 			sprite_bundle: SpriteBundle::default(),
 			collider: Collider::cuboid(pipes::WIDTH / 2., pipes::HEIGHT / 2.),
+			groups: OBSTACLE_GROUPS,
 			pipe: Pipe
 		}
     }
