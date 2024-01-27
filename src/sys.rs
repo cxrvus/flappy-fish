@@ -59,7 +59,7 @@ pub fn setup
 	commands
 		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
 		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
-		.insert(OBSTACLE_GROUPS)
+		.insert(ObstacleBundle::default())
 	;
 }
 
@@ -131,10 +131,14 @@ pub fn jump
 pub fn collision_check
 (
 	mut collision_events: EventReader<CollisionEvent>,
-	mut state: ResMut<NextState<GameState>>
+	mut state: ResMut<NextState<GameState>>,
+	obstacles: Query<Entity, With<Obstacle>>,
+	player: Query<Entity, With<Player>>,
 ) {
-	if let Some(_) = collision_events.read().next() {
-		state.set(GameState::GameOver);
+	let player = player.single();
+	while let Some(CollisionEvent::Started(a, b, _)) = collision_events.read().next() {
+		let other = if *a != player { *a } else { *b };
+		if obstacles.contains(other) { state.set(GameState::GameOver); }
 	}
 }
 
