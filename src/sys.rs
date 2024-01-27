@@ -53,6 +53,14 @@ pub fn setup
 		..default()
 	})
 	.insert(Background);
+
+	// spawn lower bound
+	// todo: spawn upper bound
+	commands
+		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
+		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
+		.insert(OBSTACLE_GROUPS)
+	;
 }
 
 
@@ -72,14 +80,6 @@ pub fn new_game
 	// reset background
 	let mut bg_transform = bg_transform.single_mut();
 	bg_transform.translation = Vec3::default();
-
-	// spawn lower bound
-	// todo: spawn upper bound
-	commands
-		.spawn(TransformBundle::from_transform(Transform::from_translation(Vec3::new(0., -env::W_HEIGHT / 2., 0.))))
-		.insert(Collider::cuboid(env::W_WIDTH / 2., 1.))
-		.insert(OBSTACLE_GROUPS)
-	;
 }
 
 
