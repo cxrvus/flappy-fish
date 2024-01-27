@@ -40,10 +40,13 @@ pub fn setup
 	asset_server: Res<AssetServer>,
 	mut timer: ResMut<PipeTimer>
 ) {
+	// create timer
 	timer.0 = Timer::new(Duration::from_secs_f32(pipes::INTERVAL), TimerMode::Repeating);
 
+	// spawn camera
 	commands.spawn(Camera2dBundle::default());
 
+	// spawn background
 	commands.spawn(SpriteBundle {
 		texture: asset_server.load("sprites/underwater.png"),
 		sprite: Sprite {
