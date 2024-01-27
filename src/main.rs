@@ -7,6 +7,7 @@ use structs::*;
 mod sys;
 use sys::*;
 
+mod cfg;
 
 fn main() {
 	App::new()
