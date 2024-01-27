@@ -104,8 +104,6 @@ pub fn spawn_player
 	.insert(Player)
 	.insert(RigidBody::Dynamic)
 	.insert(ExternalImpulse::default())
-	.insert(LockedAxes::ROTATION_LOCKED_Z)
-	.insert(LockedAxes::TRANSLATION_LOCKED_X)
 	.insert(GravityScale(player::GRAVITY))
 	.insert(Collider::capsule_x(player::COL_WIDTH, player::COL_HEIGHT))
 	.insert(ColliderMassProperties::Mass(player::WEIGHT))
