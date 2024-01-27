@@ -245,3 +245,18 @@ pub fn play_again
 		next_state.set(GameState::InGame);
 	}
 }
+
+
+pub fn despawn_oob
+(
+	mut commands: Commands,
+	player: Query<(Entity, &Transform), With<Player>>
+) {
+	if let Ok((player, transform)) = player.get_single() {
+		let half_height = win::HEIGHT / 2.;
+		let ypos = transform.translation.y;
+		if ypos < -half_height {
+			commands.entity(player).despawn();
+		}
+	}
+}

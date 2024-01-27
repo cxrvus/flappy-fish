@@ -39,6 +39,9 @@ fn main() {
 				update_score_display
 			).run_if(in_state(GameState::InGame)))
 		.add_systems(OnEnter(GameState::GameOver), game_over)
-		.add_systems(Update, play_again.run_if(in_state(GameState::GameOver)))
+		.add_systems(Update, (
+			play_again,
+			despawn_oob
+		).run_if(in_state(GameState::GameOver)))
 		.run();
 }
