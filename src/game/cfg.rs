@@ -24,6 +24,6 @@ pub mod pipes {
 }
 
 pub mod win {
-	pub const HEIGHT: f32 = 720.; //PX
-	pub const WIDTH: f32 = 1280.; //PX
+	pub const HEIGHT: f32 = 1080.; //PX
+	pub const WIDTH: f32 = 1920.; //PX
 }
